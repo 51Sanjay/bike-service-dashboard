@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {
   Box,
   Container,
@@ -38,9 +39,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  const handleBooking = () => {
-    navigate("/service"); // Change to your actual booking route
-  };
+
   const services = [
     {
       icon: <DirectionsBikeIcon sx={{ fontSize: 60, color: "#d32f2f" }} />,
@@ -84,7 +83,7 @@ const Dashboard = () => {
       {/* 1 Content  */}
       <Box
         sx={{
-          backgroundColor: "#f5f5f5",
+          backgroundColor: "#fff",
           minHeight: "100%",
           width: "100%",
           py: 3,
@@ -101,131 +100,139 @@ const Dashboard = () => {
             sx={{ objectFit: "cover", width: "100%" }}
           />
         </Card>
-      </Box>
-      {/*2 Content*/}
-      <Box sx={{ bgcolor: "#f8f9fa", py: 6, textAlign: "center" }}>
-        <Container maxWidth="lg">
-          <Typography variant="h3" fontWeight="bold">
-            No matter whatever may be the bike problem, <br />
-            Fix it with{" "}
-            <Typography
-              component="span"
-              sx={{ color: "#d32f2f", fontWeight: "bold" }}
-            >
-              Mechanic
+
+        {/*2 Content*/}
+        <Box
+          sx={{
+            bgcolor: "#f8f9fa",
+            py: 6,
+            textAlign: "center",
+            background: "#fff",
+          }}
+        >
+          <Container maxWidth="lg">
+            <Typography variant="h3" fontWeight="bold">
+              No matter whatever may be the bike problem, <br />
+              Fix it with{" "}
+              <Typography
+                component="span"
+                sx={{ color: "#d32f2f", fontWeight: "bold" }}
+              >
+                Mechanic
+              </Typography>
             </Typography>
-          </Typography>
 
-          <Typography variant="h6" sx={{ mt: 2, color: "#555" }}>
-            Best Multi Brand Two Wheeler Service Center In Kumbakonam
-          </Typography>
+            <Typography variant="h6" sx={{ mt: 2, color: "#555" }}>
+              Best Multi Brand Two Wheeler Service Center In Kumbakonam
+            </Typography>
 
-          {/* Reviews & Ratings */}
-          <Box
-            sx={{
-              mt: 2,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
+            {/* Reviews & Ratings */}
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="body1"
+                sx={{ fontWeight: "bold", color: "#d32f2f" }}
+              >
+                4.8 out of 708 Reviews
+              </Typography>
+              <Rating value={4.8} precision={0.1} readOnly sx={{ ml: 1 }} />
+            </Box>
+
+            {/* Call-to-Action Buttons */}
+            <Grid container spacing={2} justifyContent="center" sx={{ mt: 4 }}>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<PhoneIcon />}
+                  sx={{ px: 3, py: 1.2, fontWeight: "bold", fontSize: "1rem" }}
+                >
+                  CALL : 9159456789
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate("/service")}
+                  sx={{
+                    px: 3,
+                    py: 1.2,
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                    borderColor: "#d32f2f",
+                    color: "#d32f2f",
+                    "&:hover": { backgroundColor: "#d32f2f", color: "#fff" },
+                  }}
+                  
+                >
+                  Book a Service
+                </Button>
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+        {/*3 Content*/}
+        <Box sx={{ bgcolor: "#f8f9fa", py: 6, background: "#fff" }}>
+          <Container maxWidth="lg">
+            {/* Section Heading */}
+            <Typography variant="h4" fontWeight="bold" align="center">
+              Our Services
+            </Typography>
             <Typography
               variant="body1"
-              sx={{ fontWeight: "bold", color: "#d32f2f" }}
+              align="center"
+              sx={{ mt: 1, color: "#555" }}
             >
-              4.8 out of 708 Reviews
+              Get fully functional two-wheeler on the road with easy,
+              affordable, fast & quality services
             </Typography>
-            <Rating value={4.8} precision={0.1} readOnly sx={{ ml: 1 }} />
-          </Box>
 
-          {/* Call-to-Action Buttons */}
-          <Grid container spacing={2} justifyContent="center" sx={{ mt: 4 }}>
-            <Grid item>
-              <Button
-                variant="contained"
-                color="error"
-                startIcon={<PhoneIcon />}
-                sx={{ px: 3, py: 1.2, fontWeight: "bold", fontSize: "1rem" }}
-              >
-                CALL : 9159456789
-              </Button>
+            {/* Services Grid */}
+            <Grid container spacing={10} sx={{ mt: 4 }} justifyContent="center">
+              {services.map((service, index) => (
+                <Grid item xs={12} sm={6} md={4} key={index}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      p: 3,
+                      textAlign: "center",
+                      borderRadius: 12,
+                      "&:hover": { boxShadow: 3 },
+                    }}
+                  >
+                    {service.icon}
+                    <CardContent>
+                      <Typography
+                        variant="h6"
+                        fontWeight="bold"
+                        sx={{ color: "#d32f2f" }}
+                      >
+                        {service.title}
+                      </Typography>
+                      <Typography variant="body2" sx={{ mt: 2, color: "#666" }}>
+                        {service.description}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
             </Grid>
-            <Grid item>
-              <Button
-                variant="outlined"
-                sx={{
-                  px: 3,
-                  py: 1.2,
-                  fontWeight: "bold",
-                  fontSize: "1rem",
-                  borderColor: "#d32f2f",
-                  color: "#d32f2f",
-                  "&:hover": { backgroundColor: "#d32f2f", color: "#fff" },
-                }}
-                onClick={handleBooking}
-              >
-                Book a Service
-              </Button>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-      {/*3 Content*/}
-      <Box sx={{ bgcolor: "#f8f9fa", py: 6 }}>
-        <Container maxWidth="lg">
-          {/* Section Heading */}
-          <Typography variant="h4" fontWeight="bold" align="center">
-            Our Services
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            sx={{ mt: 1, color: "#555" }}
-          >
-            Get fully functional two-wheeler on the road with easy, affordable,
-            fast & quality services
-          </Typography>
+          </Container>
+        </Box>
 
-          {/* Services Grid */}
-          <Grid container spacing={10} sx={{ mt: 4 }} justifyContent="center">
-            {services.map((service, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    p: 3,
-                    textAlign: "center",
-                    borderRadius: 12,
-                    "&:hover": { boxShadow: 3 },
-                  }}
-                >
-                  {service.icon}
-                  <CardContent>
-                    <Typography
-                      variant="h6"
-                      fontWeight="bold"
-                      sx={{ color: "#d32f2f" }}
-                    >
-                      {service.title}
-                    </Typography>
-                    <Typography variant="body2" sx={{ mt: 2, color: "#666" }}>
-                      {service.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
+        {/* 4 Content */}
+        {/* service Display*/}
 
-      {/* 4 Content */}
-      {/* service Display*/}
-      <Box sx={{ maxWidth: 1000, mx: "auto", p: 3,py:6 }}>
-        <Card sx={{ p: 3, boxShadow: 3, borderRadius: 2 }}>
+        <Container sx={{ py: 5, background: "#fff" }}>
           <Grid container spacing={3} alignItems="center">
             {/* Left Side Image */}
             <Grid item xs={12} md={5}>
@@ -302,17 +309,17 @@ const Dashboard = () => {
                   color="primary"
                   fullWidth
                   sx={{ mt: 2 }}
-                  onClick={handleBooking}
+                  onClick={()=>navigate("/booking")}
                 >
-                  Book Service
+                  Booking
                 </Button>
               </CardContent>
             </Grid>
           </Grid>
-        </Card>
+        </Container>
 
         {/* 5 another Content*/}
-        <Container sx={{ py: 5 }}>
+        <Container sx={{ py: 5, background: "#fff" }}>
           <Typography variant="h5" align="center" gutterBottom>
             Quick 3-step booking
           </Typography>
@@ -348,7 +355,7 @@ const Dashboard = () => {
 
         {/*6 content*/}
         {/* Right Side - Illustration */}
-        <Box sx={{ width: "100%", backgroundColor: "#f5f5f5", py: 5 }}>
+        <Box sx={{ width: "100%", backgroundColor: "#fff", py: 5 }}>
           <Container maxWidth={false} sx={{ px: { xs: 2, sm: 4, md: 8 } }}>
             <Typography variant="h5" align="center" gutterBottom>
               Trusted Mechanics
@@ -359,7 +366,7 @@ const Dashboard = () => {
                 <img
                   src={Garage} // Replace with actual illustration
                   alt="Garage Illustration"
-                  style={{ maxWidth: "100%", height: "auto" }}
+                  style={{ maxWidth: "50%", height: "auto" }}
                 />
               </Grid>
 

@@ -123,7 +123,6 @@ export default function Navbar({ onProfileClick }) {
   );
   const menuItems = [
     { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
-    { text: "Bike Details", icon: <TwoWheelerIcon />, path: "/add-bike" },
     { text: "Service", icon: <BuildIcon />, path: "/service" },
     { text: "Booking", icon: <ConfirmationNumberIcon />, path: "/booking" },
     {text: "Live Service Tracking",icon: <TrackChangesIcon />,path: "/live-service",},

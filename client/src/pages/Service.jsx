@@ -1,62 +1,3 @@
-{
-  /*import React from "react";
-import { Card, CardMedia, CardContent, Typography, Button, Grid, Container } from "@mui/material";
-
-const services = [
-  {
-    title: "Monsoon Package",
-    price: "₹ 1699",
-    image: "https://via.placeholder.com/300x200", // Replace with actual image
-    bookings: "1936 have availed",
-  },
-  {
-    title: "Mileage+",
-    price: "₹ 1999",
-    image: "https://via.placeholder.com/300x200", // Replace with actual image
-    bookings: "2762 have availed",
-  },
-  {
-    title: "Car Repair Service",
-    price: "₹ -",
-    image: "https://via.placeholder.com/300x200", // Replace with actual image
-    bookings: "2124 have availed",
-  },
-];
-
-const Service = () => {
-  return (
-    <Container>
-      <Typography variant="h5" gutterBottom>
-        Our Most Popular Services
-      </Typography>
-      <Grid container spacing={3}>
-        {services.map((service, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="200"
-                image={service.image}
-                alt={service.title}
-              />
-              <CardContent>
-                <Typography variant="h6">{service.title}</Typography>
-                <Typography color="textSecondary">{service.bookings}</Typography>
-                <Typography variant="h6" color="primary">{service.price}</Typography>
-                <Button variant="outlined" fullWidth sx={{ mt: 2 }}>
-                  Book Now
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
-  );
-};
-
-export default Service;*/
-}
 import {
   Container,
   Grid,
@@ -65,6 +6,7 @@ import {
   CardContent,
   Badge,
   Box,
+  Paper,
 } from "@mui/material";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
 import CarRepairIcon from "@mui/icons-material/CarRepair";
@@ -76,38 +18,60 @@ import CategoryIcon from "@mui/icons-material/Category";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import Puncture from "../assets/Puncture.png"
+import BikeEngine from "../assets/BikeEngine.png"
+
+
 
 const Service = () => {
   const navigate = useNavigate();
 
   const services = [
     {
-      icon: <TwoWheelerIcon sx={{ fontSize: 40, color: "#f39c12" }} />,
+      icon: <TwoWheelerIcon sx={{ fontSize: 40,  }} />,
       title: "General Service",
-      path: "/general-service",
+      path: "/generalservice",
     },
     {
-      icon: <CarRepairIcon sx={{ fontSize: 40, color: "#f39c12" }} />,
-      title: "Vehicle Breakdown",
-      path: "/vehicle-breakdown",
+      icon: <BuildIcon sx={{ fontSize: 40,  }} />,
+      title: "Bike Breakdown",
+      path: "/bikebreakdown",
     },
     {
-      icon: <BuildIcon sx={{ fontSize: 40, color: "#f39c12" }} />,
-      title: "Engine Reboring",
-      path: "/engine-reboring",
+      icon:( <img
+      src={BikeEngine}
+      alt="BikeEngine"
+      style={{ width: 40, height: 40, objectFit: "contain", }}
+    />
+      ),
+      title: "Bike Engine Reboring",
+      path: "/bike-engine",
     },
     {
-      icon: <OpacityIcon sx={{ fontSize: 40, color: "#f39c12" }} />,
-      title: "Wash & Polish",
-      path: "/wash-polish",
+      icon: <OpacityIcon sx={{ fontSize: 40, }} />,
+      title: "Water Service",
+      path: "/WaterService",
     },
     {
-      icon: <LocalOfferIcon sx={{ fontSize: 40, color: "#f39c12" }} />,
+      icon: (
+        <img
+          src={Puncture}
+          alt="Puncture"
+          style={{ width: 40, height: 40, objectFit: "contain", }}
+        />
+      ),
+      title: "Puncture",
+      path: "/Puncture",
+
+    },
+    {
+      icon: <LocalOfferIcon sx={{ fontSize: 40,  }} />,
       title: "Offers",
-      path: "/offers",
+      path: "/offer",
       badge: "Upto 30% off",
     },
   ];
+
   const features = [
     { title: "Pick & Drop Service", icon: <TwoWheelerIcon /> },
     { title: "Warranted Spare Parts", icon: <BuildIcon /> },
@@ -115,6 +79,33 @@ const Service = () => {
     { title: "Realtime Tracking", icon: <PhoneIphoneIcon /> },
     { title: "Standardized Workshops", icon: <CheckCircleIcon /> },
     { title: "24/7 Support", icon: <SupportAgentIcon /> },
+  ];
+  const steps = [
+    {
+      number: "01",
+      title: "Select Bike Model",
+      description: "Browse and select your exact bike type and brand and model to ensure accurate service and care.",
+    },
+    {
+      number: "02",
+      title: "Choose Services",
+      description: "Expert diagnostics and repairs for motorbikes, ensuring top performance and reliability.",
+    },
+    {
+      number: "03",
+      title: "Make Appointment",
+      description: "Set your preferred date and time for the service—flexible slots available throughout the week.",
+    },
+    {
+      number: "04",
+      title: "Confirm Request",
+      description: "Review your selected services and appointment details before final confirmation.",
+    },
+    {
+      number: "05",
+      title: "Pick Your bike",
+      description: "Once the service is complete, pick up your bike or choose our convenient drop-off option.",
+    },
   ];
 
   return (
@@ -146,13 +137,13 @@ const Service = () => {
                   textAlign: "center",
                   p: 3,
                   borderRadius: 3,
-                  background: "rgba(255, 255, 255, 0.1)",
+                  background: "rgba(255, 165, 0, 0.1)",
                   backdropFilter: "blur(10px)",
                   boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
                   color: "#333",
                   transition: "0.3s",
                   "&:hover": {
-                    boxShadow: "0px 8px 20px rgba(0, 0, 0, 0.2)",
+                    boxShadow: "0px 8px 20px rgba(255, 165, 0, 0.6)",
                     transform: "translateY(-5px)",
                     cursor: "pointer",
                   },
@@ -161,7 +152,7 @@ const Service = () => {
               >
                 {service.icon}
                 <CardContent>
-                  <Typography variant="h6" fontWeight="bold">
+                  <Typography variant="h6" fontWeight="bold" sx={{color:"#f39c12"}}>
                     {service.title}
                   </Typography>
                 </CardContent>
@@ -229,6 +220,78 @@ const Service = () => {
           </Grid>
         </Container>
       </Box>
+
+      {/*Content 3 */}
+      <Box sx={{ py: 8, backgroundColor: "#f5f5f5", }}>
+      <Container>
+        <Typography
+          variant="h4"
+          align="center"
+          fontWeight="bold"
+          gutterBottom
+          sx={{ color: "#f39c12"}}
+        >
+          WORK PROCESS
+        </Typography>
+        <Typography align="center" color="text.secondary" mb={6}>
+          We offer comprehensive bike services, including engine and electrical diagnostics. Contact us today for reliable motorbike repair solutions.
+        </Typography>
+
+        <Grid container spacing={4} justifyContent="center">
+          {steps.map((step, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Paper
+                elevation={4}
+                sx={{
+                  position: "relative",
+                  p: 3,
+                  textAlign: "center",
+                  transform: index % 2 === 0 ? "rotate(-2deg)" : "rotate(2deg)",
+                  borderRadius: 3,
+                  backgroundColor: "#F4F7FE",
+                  "&:hover": {
+                    transform: "scale(1.03)",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: "50%",
+                    backgroundColor: "#f39c12",
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                    position: "absolute",
+                    top: -25,
+                    left: "calc(50% - 25px)",
+                    boxShadow: 3,
+                  }}
+                >
+                  {step.number}
+                </Box>
+                <Box mt={4}>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    sx={{ color: "#f39c12" }}
+                  >
+                    {step.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" mt={1}>
+                    {step.description}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
     </Box>
   );
 };
