@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema({
   name: { type: String, required: true },
+  email: { type: String, required: true },
   phone: { type: String, required: true },
   location: { type: String },
   vehicleNumber: { type: String },
@@ -12,6 +13,7 @@ const bookingSchema = new mongoose.Schema({
   timeSlot: { type: String },
   services: [{ type: String }],
   pickupDrop: { type: String },
+  totalAmount: { type: Number },
 }, { timestamps: true });
 
 const Booking = mongoose.model("Booking", bookingSchema);

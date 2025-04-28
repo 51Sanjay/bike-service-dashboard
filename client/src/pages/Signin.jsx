@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextField, Button, Paper, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for API calls
+import { GoogleLogin } from "@react-oauth/google";
 
 const Signin = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -84,6 +85,29 @@ const Signin = () => {
     } finally {
       setLoading(false); // Stop loading
     }
+  };
+
+  // ✅ Add proper Google Login handlers inside the component
+  const handleGoogleSuccess = async (credentialResponse) => {
+    console.log("Google Login initiated with credential:", credentialResponse);
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/auth/google-login",
+        {
+          token: credentialResponse.credential,
+        },
+      );
+      console.log("Google Login Success Response:", response.data);
+
+      alert(response.data.message || "Google Login Successful!");
+      navigate("/dashboard");
+    } catch (error) {
+      alert(error.response?.data?.message || "Google login failed");
+    }
+  };
+
+  const handleGoogleFailure = () => {
+    alert("Google login failed");
   };
 
   return (
@@ -195,6 +219,21 @@ const Signin = () => {
             {loading ? "Processing..." : isSignUp ? "Sign Up" : "Sign In"}
           </Button>
         </form>
+        <Typography
+          variant="subtitle2"
+          align="center"
+          sx={{ my: 2, fontWeight: "bold" }}
+        >
+          — OR —
+        </Typography>
+
+        {/* ✅ Google Login button properly placed */}
+        <Box mt={3} display="flex" justifyContent="center">
+          <GoogleLogin 
+            onSuccess={handleGoogleSuccess}
+            onError={handleGoogleFailure}
+          />
+        </Box>
 
         <Button
           onClick={() => setIsSignUp(!isSignUp)}

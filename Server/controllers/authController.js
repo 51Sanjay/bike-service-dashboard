@@ -1,6 +1,9 @@
+import { OAuth2Client } from "google-auth-library";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID); // Initialize OAuth2Client
 
 export const signup = async (req, res) => {
   try {
@@ -66,5 +69,48 @@ export const signin = async (req, res) => {
     res.json({ message: "Login successful!" });
   } catch (error) {
     res.status(500).json({ message: "Server error: " + error.message });
+  }
+};
+
+export const googleLogin = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, sub } = payload; // sub is Google's unique user ID
+
+    // Check if user already exists
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      // Create a new user
+      user = new User({
+        username: name,
+        email,
+        phone: "0000000000", // Dummy phone if Google doesn't provide
+        password: sub, // Save Google's sub as password (hashed by mongoose pre-save hook)
+      });
+      await user.save();
+    }
+
+    // Generate JWT token
+    const tokenJWT = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+    res.cookie("token", tokenJWT, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 3600000, // 1 hour
+    });
+
+    res.json({ message: "Google login successful!" });
+  } catch (error) {
+    console.error("Google login error:", error.message);
+    res.status(500).json({ message: "Google login failed. Please try again later." });
   }
 };
