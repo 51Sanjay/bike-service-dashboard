@@ -12,7 +12,7 @@ import Footer from "./pages/Footer";
 import GeneralService from "./service/GeneralService";
 import BreakdownService from "./service/BikeBreakdown";
 import BikeEngine from "./service/BikeEngine";
-import WaterService from "./service/Waterservice";
+import WaterService from "./service/WaterService";
 import Puncture from "./service/Puncture"
 import Offer from "./service/Offer"
 import ScrollToTop from "./pages/ScrollToTop";

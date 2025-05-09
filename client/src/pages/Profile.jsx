@@ -1,21 +1,23 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const username = localStorage.getItem("username");
-  const email = localStorage.getItem("email");
-  const phone = localStorage.getItem("phone");
+  // Fallback to localStorage if Redux state is empty
+  const { username, email, phone } = useSelector((state) => state.user);
+  
+  const storedUser = JSON.parse(localStorage.getItem("user")) || {};
 
   return (
     <div style={{ paddingTop: "120px" }}>
       <h2>Profile Details</h2>
       <p>
-        <strong>Username:</strong> {username}
+        <strong>Username:</strong> {username || storedUser.username}
       </p>
       <p>
-        <strong>Email:</strong> {email}
+        <strong>Email:</strong> {email || storedUser.email}
       </p>
       <p>
-        <strong>Phone:</strong> {phone}
+        <strong>Phone:</strong> {phone || storedUser.phone}
       </p>
     </div>
   );

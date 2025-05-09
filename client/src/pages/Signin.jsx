@@ -3,6 +3,9 @@ import { TextField, Button, Paper, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"; // Import axios for API calls
 import { GoogleLogin } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
+import { setUser } from "../redux/userSlice"; // Adjust path as needed
+
 
 const Signin = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -17,6 +20,7 @@ const Signin = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false); // To show a loading state
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -74,7 +78,21 @@ const Signin = () => {
       alert(
         response.data.message ||
           (isSignUp ? "Signup Successful!" : "Login Successful!"),
+
       );
+      // After successful login/signup
+     
+dispatch(setUser({
+  username: formData.username,
+  email: formData.email,
+  phone: formData.phone,
+}));
+
+localStorage.setItem("user", JSON.stringify({
+  username: formData.username,
+  email: formData.email,
+  phone: formData.phone,
+}));
       navigate("/dashboard"); // Redirect to dashboard after success
     } catch (error) {
       setErrors({
@@ -109,6 +127,9 @@ const Signin = () => {
   const handleGoogleFailure = () => {
     alert("Google login failed");
   };
+ 
+
+
 
   return (
     <Box

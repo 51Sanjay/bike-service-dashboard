@@ -20,7 +20,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import TwoWheelerIcon from "@mui/icons-material/TwoWheeler";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
 
 const serviceOptionsWithPrice = [
   { name: "General service", price: 200 },
@@ -131,6 +135,16 @@ const timeSlots = [
 ];
 
 const Booking = () => {
+  const selectedService = useSelector(
+    (state) => state.booking.selectedService || [],
+  );
+  const selectedWaterService = useSelector(
+    (state) => state.waterService.selectedWaterService || [],
+  );
+
+  // Combine all selected services into one array
+  const allSelectedServices = [...selectedService, ...selectedWaterService];
+
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -145,6 +159,7 @@ const Booking = () => {
     date: "",
     timeSlot: "",
     services: [],
+    addtoCard: "",
     pickupDrop: "None",
   });
 
@@ -184,34 +199,34 @@ const Booking = () => {
 
   const validateForm = () => {
     const newErrors = {};
-  
+
     if (!formData.name.trim()) newErrors.name = "Name is required";
-  
+
     if (!formData.email.trim()) {
       newErrors.email = "E-Mail is required";
     } else if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(formData.email)) {
       newErrors.email = "Please enter a valid Gmail address";
     }
-  
+
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
     } else if (!/^\d{10}$/.test(formData.phone)) {
       newErrors.phone = "Phone must be 10 digits";
     }
-  
+
     if (!formData.location.trim()) newErrors.location = "Location is required";
-  
+
     if (!formData.vehicleNumber.trim()) {
       newErrors.vehicleNumber = "Vehicle number is required";
     } else if (
       !/^[A-Z]{2}\d{1,2}[A-Z]{1,2}\d{4}$/.test(
-        formData.vehicleNumber.trim().toUpperCase()
+        formData.vehicleNumber.trim().toUpperCase(),
       )
     ) {
       newErrors.vehicleNumber =
         "Enter a valid vehicle number (e.g., TN49AB1234)";
     }
-  
+
     if (!formData.vehicleType)
       newErrors.vehicleType = "Vehicle type is required";
     if (!formData.vehicleBrand)
@@ -222,11 +237,10 @@ const Booking = () => {
     if (!formData.timeSlot) newErrors.timeSlot = "Please select a time slot";
     if (formData.services.length === 0)
       newErrors.services = "Select at least one service";
-  
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -238,7 +252,7 @@ const Booking = () => {
         formData,
       );
 
-      navigate("/payment")
+      navigate("/payment");
 
       alert("✅ Booking successful!");
       setFormData({
@@ -253,8 +267,9 @@ const Booking = () => {
         date: "",
         timeSlot: "",
         services: [],
+        addtoCard: [],
         pickupDrop: "None",
-        totalAmount: "",
+        totalAmount: 0,
       });
       setErrors({});
     } catch (error) {
@@ -264,6 +279,33 @@ const Booking = () => {
       );
     }
   };
+
+  // Calculate total amount
+  const calculateTotal = () => {
+    const serviceTotal = formData.services
+      .map(
+        (selectedName) =>
+          serviceOptionsWithPrice.find((s) => s.name === selectedName)?.price ||
+          0,
+      )
+      .reduce((a, b) => a + b, 0);
+
+    const selectedCardTotal = selectedService
+      .map((s) => s.newPrice || 0)
+      .reduce((a, b) => a + b, 0);
+
+    const waterServiceTotal = selectedWaterService
+      .map((s) => s.newPrice || 0)
+      .reduce((a, b) => a + b, 0);
+
+    return serviceTotal + selectedCardTotal + waterServiceTotal;
+  };
+
+  const [totalAmounto, setTotalAmounto] = useState(0);
+
+  useEffect(() => {
+    setTotalAmounto(calculateTotal());
+  }, [formData.services, selectedService, selectedWaterService]);
 
   return (
     <Box
@@ -444,6 +486,64 @@ const Booking = () => {
               </Grid>
 
               <Grid item xs={12}>
+                <FormControl component="fieldset" value={formData.addtoCard}>
+                  <FormLabel component="legend">
+                    Booking Add to Cards :
+                  </FormLabel>
+                  <FormGroup>
+                    <Grid container spacing={4} direction="column">
+                      {allSelectedServices.map((service, index) => (
+                        <Grid item xs={12} sm={6} md={4} key={index}>
+                          <Box
+                            sx={{
+                              backgroundColor: service.bgColor,
+                              borderRadius: 5,
+                              p: 5,
+                              color: "#000",
+                              boxShadow: 4,
+                              textAlign: "center",
+                              mb: { xs: 4, md: 0 },
+                              mt: 4,
+                            }}
+                          >
+                            <Typography variant="h5" fontWeight="bold" mb={2}>
+                              {service.title}
+                            </Typography>
+                            {(service.features || []).map((point, i) => (
+                              <Box
+                                key={i}
+                                display="flex"
+                                alignItems="center"
+                                mb={1}
+                              >
+                                <CheckCircleIcon
+                                  sx={{ color: "green", mr: 1 }}
+                                />
+                                <Typography>{point}</Typography>
+                              </Box>
+                            ))}
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                textDecoration: "line-through",
+                                opacity: 0.6,
+                                mt: 2,
+                              }}
+                            >
+                              ₹{service.oldPrice}
+                            </Typography>
+                            <Typography variant="h6" fontWeight="bold">
+                              ₹{service.newPrice}
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </FormGroup>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Pickup / Drop</FormLabel>
                   <RadioGroup
@@ -513,9 +613,11 @@ const Booking = () => {
               </Grid>
 
               {/* Total Amount */}
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Total Amount: ₹{formData.totalAmount}
-              </Typography>
+              <Box mt={2}>
+                <Typography variant="h6" fontWeight="bold">
+                  Total Amount: ₹{totalAmounto}
+                </Typography>
+              </Box>
 
               <Grid item xs={12}>
                 <Button

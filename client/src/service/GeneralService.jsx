@@ -1,234 +1,223 @@
 import React from "react";
+import {
+  Box,
+  Typography,
+  Grid,
+  Button,
+  Container,
+  Card,
+  CardContent,
+  CardActions,
+  CardHeader,
+  Chip,
+  Divider,
+  Avatar,
+} from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
 import { useNavigate } from "react-router-dom";
-import { Box, Typography, Grid, Button, Container } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import MotorcycleIcon from "@mui/icons-material/TwoWheeler";
+import { useDispatch } from "react-redux";
+import { setSelectedService } from "../redux/Slice";
+
+// Icons
+import BuildIcon from "@mui/icons-material/Build";
+import BatteryChargingFullIcon from "@mui/icons-material/BatteryChargingFull";
+import OilBarrelIcon from "@mui/icons-material/OilBarrel";
+import StarIcon from "@mui/icons-material/Star";
 
 const GeneralService = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const servicePoints = [
-    "Air Filter Cleaning",
-    "Cables & Levers Adjustment",
-    "Dry Wash",
-    "Battery Voltage Check",
-    "Chain Tension Check",
-    "Electrical Check-up",
-    "Brakes Service",
-    "Clutch Greasing",
-    "Engine Oil Check",
-  ];
+  const getIcon = (iconName) => {
+    switch (iconName) {
+      case "BuildIcon":
+        return <BuildIcon />;
+      case "WaterDropIcon":
+        return <WaterDropIcon />;
+      case "OilBarrelIcon":
+        return <OilBarrelIcon />;
+      case "StarIcon":
+        return <StarIcon sx={{ color: "#ffb300" }} />;
+      default:
+        return null;
+    }
+  };
 
   const services = [
     {
-      title: "Silver Service",
+      title: "General",
+      icon: "BuildIcon",
+      color: "#e0f7fa",
       features: [
-        "Air Filter Cleaning",
+        "Chain Tension Check",
+        "Brakes Service",
+        "Clutch Greasing",
+        "Engine Oil Check",
+      ],
+      oldPrice: 799,
+      newPrice: 599,
+    },
+    {
+      title: "Silver",
+      icon: "WaterDropIcon",
+      color: "#f0f4c3",
+      features: [
         "Dry Wash",
         "Battery Voltage Check",
         "Chain Lubrication",
         "Brake Inspection",
       ],
-      oldPrice: 799,
-      newPrice: 599,
-      bgColor: "#cfe8fc",
+      oldPrice: 899,
+      newPrice: 699,
     },
     {
-      title: "Gold Service",
+      title: "Gold",
+      icon: "OilBarrelIcon",
+      color: "#ffe082",
       features: [
-        "All Silver Services",
+        "Silver Service +",
         "Cables & Levers Adjustment",
         "Clutch Greasing",
         "Engine Oil Top-up",
-        "Electrical Check-up",
       ],
       oldPrice: 1399,
       newPrice: 1099,
-      bgColor: "#a6d4fa",
     },
     {
-      title: "Platinum Service",
+      title: "Platinum",
+      icon: "StarIcon",
+      color: "#ffcdd2",
       features: [
-        "All Gold Services",
-        "Full Synthetic Oil Change",
-        "Complete Brake Service",
-        "Chain Sprocket Cleaning",
+        "Gold Service +",
+        "Synthetic Oil Change",
+        "Full Brake Service",
         "Detail Polishing",
       ],
       oldPrice: 1999,
       newPrice: 1699,
-      bgColor: "#90caf9",
+      premium: true,
     },
   ];
 
-  const handleCheckout = () => {
+  const handleCheckout = (service) => {
+    dispatch(setSelectedService(service));
     navigate("/booking");
   };
 
   return (
-    <>
-      {/* General Service Section */}
-      <Box
-        sx={{
-          backgroundColor: "#fff",
-          minHeight: "100%",
-          width: "100%",
-          py: 3,
-          paddingTop: "130px",
-        }}
-      >
-        <Box
-          sx={{
-            backgroundColor: "#C2B97F",
-            color: "black",
-            minHeight: "100vh",
-            py: 5,
-          }}
-        >
-          <Container maxWidth="md">
-            <Box textAlign="center" py={3}>
-              <MotorcycleIcon sx={{ fontSize: 80 }} aria-label="Bike Icon" />
-              <Typography
-                variant="h4"
-                fontWeight="bold"
-                mt={2}
-                sx={{ textDecoration: "underline" }}
-              >
-                General Service
-              </Typography>
-              <Typography variant="body1" mt={1}>
-                • Available at Doorstep &nbsp;&nbsp;• 500 Kms or 1 Month
-                Warranty &nbsp;&nbsp;• Every 3000 Kms or 3 Months (Recommended)
-                <br />
-                <AccessTimeIcon sx={{ fontSize: 16, mb: "-3px", ml: 1 }} /> 2
-                Hrs taken
-              </Typography>
-            </Box>
-
-            <Grid container spacing={2}>
-              {servicePoints.map((point, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Box display="flex" alignItems="center">
-                    <CheckCircleIcon sx={{ color: "#FFFDD0", mr: 1 }} />
-                    <Typography>{point}</Typography>
-                  </Box>
-                </Grid>
-              ))}
-            </Grid>
-
-            <Box mt={5} textAlign="center">
-              <Typography
-                variant="body2"
-                sx={{ textDecoration: "line-through", opacity: 0.7 }}
-              >
-                ₹1399
-              </Typography>
-              <Typography variant="h5" fontWeight="bold" color="white">
-                ₹1199
-              </Typography>
-
-              <Button
-                variant="contained"
-                onClick={handleCheckout}
-                sx={{
-                  mt: 2,
-                  backgroundColor: "#383896",
-                  "&:hover": { backgroundColor: "#B4C5E4", color: "#000" },
-                  px: 5,
-                  py: 1.5,
-                  fontWeight: "bold",
-                  borderRadius: 3,
-                }}
-              >
-                Checkout
-              </Button>
-            </Box>
-          </Container>
-        </Box>
-      </Box>
-
-      {/* Service Plans Section */}
-      <Box
-        sx={{
-          backgroundColor: "#fff",
-          width: "100%",
-          py: 5,
-        }}
-      >
+    <Box
+      sx={{ backgroundColor: "#fff", minHeight: "100%", py: 3, pt: "130px" }}
+    >
+      <Box py={6} bgcolor="#f5f5f5">
         <Container maxWidth="lg">
-          <Box textAlign="center" mb={5}>
-            <MotorcycleIcon sx={{ fontSize: 80 }} aria-label="Bike Icon" />
-            <Typography variant="h4" fontWeight="bold" mt={2}>
-              Choose Your Bike Service Plan
-            </Typography>
-            <Typography variant="body1" mt={1}>
-              • Doorstep Service Available &nbsp;&nbsp;• Up to 1 Month Warranty
-              <br />
-              <AccessTimeIcon sx={{ fontSize: 16, mb: "-3px", ml: 1 }} />{" "}
-              Approx. 2–3 Hrs
-            </Typography>
-          </Box>
+          <Typography
+            variant="h4"
+            align="center"
+            fontWeight="bold"
+            gutterBottom
+          >
+            Bike Service Plans
+          </Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            color="textSecondary"
+            mb={5}
+          >
+            Select the best plan for your bike. All services include doorstep
+            pickup and drop.
+          </Typography>
 
           <Grid container spacing={4}>
             {services.map((service, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Box
+              <Grid item xs={12} sm={6} md={3} display="flex" key={index}>
+                <Card
+                  elevation={4}
                   sx={{
-                    backgroundColor: service.bgColor,
                     borderRadius: 4,
-                    p: 3,
-                    color: "#000",
-                    boxShadow: 4,
-                    textAlign: "center",
-                    mb: { xs: 4, md: 0 },
-                    "&:hover": {
-                      transform: "scale(1.03)",
-                      transition: "0.3s ease-in-out",
-                    },
+                    transition: "transform 0.3s ease",
+                    "&:hover": { transform: "scale(1.03)" },
+                    backgroundColor: "#fff",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    width: "100%",
                   }}
                 >
-                  <Typography variant="h5" fontWeight="bold" mb={2}>
-                    {service.title}
-                  </Typography>
-                  {service.features.map((point, i) => (
-                    <Box key={i} display="flex" alignItems="center" mb={1}>
-                      <CheckCircleIcon sx={{ color: "green", mr: 1 }} />
-                      <Typography>{point}</Typography>
+                  <CardHeader
+                    avatar={
+                      <Avatar sx={{ bgcolor: service.color }}>
+                        {service.iconName}
+                      </Avatar>
+                    }
+                    title={
+                      <Typography variant="h6" fontWeight="bold">
+                        {service.title} Service
+                      </Typography>
+                    }
+                    subheader={
+                      service.premium && (
+                        <Chip
+                          label="Premium"
+                          size="small"
+                          sx={{ backgroundColor: "#ffd54f", color: "#000" }}
+                        />
+                      )
+                    }
+                  />
+                  <Divider />
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    {service.features.map((item, i) => (
+                      <Box display="flex" alignItems="center" mb={1} key={i}>
+                        <CheckIcon sx={{ color: "green", mr: 1 }} />
+                        <Typography variant="body2">{item}</Typography>
+                      </Box>
+                    ))}
+
+                    <Box mt={2}>
+                      <Typography
+                        variant="body2"
+                        sx={{ textDecoration: "line-through", color: "gray" }}
+                      >
+                        ₹{service.oldPrice}
+                      </Typography>
+                      <Typography variant="h6" fontWeight="bold">
+                        ₹{service.newPrice}
+                      </Typography>
+                      <Chip
+                        label={`Save ₹${service.oldPrice - service.newPrice}`}
+                        color="success"
+                        size="small"
+                        sx={{ mt: 1 }}
+                      />
                     </Box>
-                  ))}
-                  <Typography
-                    variant="body2"
-                    sx={{ textDecoration: "line-through", opacity: 0.6, mt: 2 }}
-                  >
-                    ₹{service.oldPrice}
-                  </Typography>
-                  <Typography variant="h6" fontWeight="bold">
-                    ₹{service.newPrice}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={handleCheckout}
-                    sx={{
-                      mt: 2,
-                      backgroundColor: "#383896",
-                      color: "#fff",
-                      "&:hover": { backgroundColor: "#B4C5E4", color: "#000" },
-                      px: 4,
-                      py: 1.2,
-                      fontWeight: "bold",
-                      borderRadius: 3,
-                    }}
-                  >
-                    Book Now
-                  </Button>
-                </Box>
+                  </CardContent>
+                  <CardActions sx={{ justifyContent: "center", pb: 2 }}>
+                    <Button
+                      variant="contained"
+                      size="medium"
+                      sx={{
+                        backgroundColor: "#1976d2",
+                        textTransform: "none",
+                        borderRadius: 3,
+                        px: 4,
+                        py: 1.2,
+                        fontWeight: "bold",
+                        "&:hover": { backgroundColor: "#1565c0" },
+                      }}
+                      onClick={() => handleCheckout(service)}
+                    >
+                      Book Now
+                    </Button>
+                  </CardActions>
+                </Card>
               </Grid>
             ))}
           </Grid>
         </Container>
       </Box>
-    </>
+    </Box>
   );
 };
 
