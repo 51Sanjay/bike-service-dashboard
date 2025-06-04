@@ -16,7 +16,7 @@ import {
 import CheckIcon from "@mui/icons-material/Check";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setSelectedService } from "../redux/Slice";
+import { setGeneralService } from "../redux/generalSlice";
 
 // Icons
 import BuildIcon from "@mui/icons-material/Build";
@@ -28,19 +28,11 @@ const GeneralService = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const getIcon = (iconName) => {
-    switch (iconName) {
-      case "BuildIcon":
-        return <BuildIcon />;
-      case "WaterDropIcon":
-        return <WaterDropIcon />;
-      case "OilBarrelIcon":
-        return <OilBarrelIcon />;
-      case "StarIcon":
-        return <StarIcon sx={{ color: "#ffb300" }} />;
-      default:
-        return null;
-    }
+  const getIcon =  {
+      BuildIcon:<BuildIcon />,
+      WaterDropIcon: <BatteryChargingFullIcon />,
+      OilBarrelIcon:<OilBarrelIcon />,
+      StarIcon:<StarIcon/>,
   };
 
   const services = [
@@ -100,7 +92,7 @@ const GeneralService = () => {
   ];
 
   const handleCheckout = (service) => {
-    dispatch(setSelectedService(service));
+    dispatch(setGeneralService(service));
     navigate("/booking");
   };
 
@@ -148,7 +140,7 @@ const GeneralService = () => {
                   <CardHeader
                     avatar={
                       <Avatar sx={{ bgcolor: service.color }}>
-                        {service.iconName}
+                        {getIcon[service.icon]}
                       </Avatar>
                     }
                     title={

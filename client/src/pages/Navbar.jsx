@@ -131,8 +131,8 @@ export default function Navbar({ onProfileClick }) {
 
   return (
     <>
-      <AppBar position="fixed" sx={{ background: "#079992" }}>
-        <Toolbar>
+      <AppBar position="fixed" >
+        <Toolbar sx={{ background: "#3F4F44" }}>
           {/* Logo */}
           <Box
             component="img"
@@ -184,6 +184,7 @@ export default function Navbar({ onProfileClick }) {
         </Toolbar>
 
         {/* Another Navbar */}
+         <Toolbar sx={{ background: "#A27B5C" }}>
         <Box
           sx={{
             display: "flex",
@@ -191,7 +192,7 @@ export default function Navbar({ onProfileClick }) {
             justifyContent: { xs: "center", md: "flex-start" },
             alignItems: "center",
             flexWrap: "wrap",
-            backgroundColor: "black",
+            //backgroundColor: "black",
             padding: "10px 0",
             width: "100%", // Ensure full width
           }}
@@ -228,6 +229,7 @@ export default function Navbar({ onProfileClick }) {
             </Box>
           ))}
         </Box>
+         </Toolbar>
       </AppBar>
       {renderMobileMenu}
       {renderMenu}

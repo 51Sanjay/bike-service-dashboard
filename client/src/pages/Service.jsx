@@ -18,37 +18,36 @@ import CategoryIcon from "@mui/icons-material/Category";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import Puncture from "../assets/Puncture.png"
-import BikeEngine from "../assets/BikeEngine.png"
-
-
+import Puncture from "../assets/Puncture.png";
+import BikeEngine from "../assets/BikeEngine.png";
 
 const Service = () => {
   const navigate = useNavigate();
 
   const services = [
     {
-      icon: <TwoWheelerIcon sx={{ fontSize: 40,  }} />,
+      icon: <TwoWheelerIcon sx={{ fontSize: 40 }} />,
       title: "General Service",
       path: "/generalservice",
     },
     {
-      icon: <BuildIcon sx={{ fontSize: 40,  }} />,
+      icon: <BuildIcon sx={{ fontSize: 40 }} />,
       title: "Bike Breakdown",
       path: "/bikebreakdown",
     },
     {
-      icon:( <img
-      src={BikeEngine}
-      alt="BikeEngine"
-      style={{ width: 40, height: 40, objectFit: "contain", }}
-    />
+      icon: (
+        <img
+          src={BikeEngine}
+          alt="BikeEngine"
+          style={{ width: 40, height: 40, objectFit: "contain" }}
+        />
       ),
       title: "Bike Engine Reboring",
       path: "/bike-engine",
     },
     {
-      icon: <OpacityIcon sx={{ fontSize: 40, }} />,
+      icon: <OpacityIcon sx={{ fontSize: 40 }} />,
       title: "Water Service",
       path: "/WaterService",
     },
@@ -57,15 +56,14 @@ const Service = () => {
         <img
           src={Puncture}
           alt="Puncture"
-          style={{ width: 40, height: 40, objectFit: "contain", }}
+          style={{ width: 40, height: 40, objectFit: "contain" }}
         />
       ),
       title: "Puncture",
       path: "/Puncture",
-
     },
     {
-      icon: <LocalOfferIcon sx={{ fontSize: 40,  }} />,
+      icon: <LocalOfferIcon sx={{ fontSize: 40 }} />,
       title: "Offers",
       path: "/offer",
       badge: "Upto 30% off",
@@ -84,27 +82,32 @@ const Service = () => {
     {
       number: "01",
       title: "Select Bike Model",
-      description: "Browse and select your exact bike type and brand and model to ensure accurate service and care.",
+      description:
+        "Browse and select your exact bike type and brand and model to ensure accurate service and care.",
     },
     {
       number: "02",
       title: "Choose Services",
-      description: "Expert diagnostics and repairs for motorbikes, ensuring top performance and reliability.",
+      description:
+        "Expert diagnostics and repairs for motorbikes, ensuring top performance and reliability.",
     },
     {
       number: "03",
       title: "Make Appointment",
-      description: "Set your preferred date and time for the service—flexible slots available throughout the week.",
+      description:
+        "Set your preferred date and time for the service—flexible slots available throughout the week.",
     },
     {
       number: "04",
       title: "Confirm Request",
-      description: "Review your selected services and appointment details before final confirmation.",
+      description:
+        "Review your selected services and appointment details before final confirmation.",
     },
     {
       number: "05",
       title: "Pick Your bike",
-      description: "Once the service is complete, pick up your bike or choose our convenient drop-off option.",
+      description:
+        "Once the service is complete, pick up your bike or choose our convenient drop-off option.",
     },
   ];
 
@@ -152,7 +155,11 @@ const Service = () => {
               >
                 {service.icon}
                 <CardContent>
-                  <Typography variant="h6" fontWeight="bold" sx={{color:"#f39c12"}}>
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    sx={{ color: "#f39c12" }}
+                  >
                     {service.title}
                   </Typography>
                 </CardContent>
@@ -222,76 +229,79 @@ const Service = () => {
       </Box>
 
       {/*Content 3 */}
-      <Box sx={{ py: 8, backgroundColor: "#f5f5f5", }}>
-      <Container>
-        <Typography
-          variant="h4"
-          align="center"
-          fontWeight="bold"
-          gutterBottom
-          sx={{ color: "#f39c12"}}
-        >
-          WORK PROCESS
-        </Typography>
-        <Typography align="center" color="text.secondary" mb={6}>
-          We offer comprehensive bike services, including engine and electrical diagnostics. Contact us today for reliable motorbike repair solutions.
-        </Typography>
+      <Box sx={{ py: 8, backgroundColor: "#f5f5f5" }}>
+        <Container>
+          <Typography
+            variant="h4"
+            align="center"
+            fontWeight="bold"
+            gutterBottom
+            sx={{ color: "#f39c12" }}
+          >
+            WORK PROCESS
+          </Typography>
+          <Typography align="center" color="text.secondary" mb={6}>
+            We offer comprehensive bike services, including engine and
+            electrical diagnostics. Contact us today for reliable motorbike
+            repair solutions.
+          </Typography>
 
-        <Grid container spacing={4} justifyContent="center">
-          {steps.map((step, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Paper
-                elevation={4}
-                sx={{
-                  position: "relative",
-                  p: 3,
-                  textAlign: "center",
-                  transform: index % 2 === 0 ? "rotate(-2deg)" : "rotate(2deg)",
-                  borderRadius: 3,
-                  backgroundColor: "#F4F7FE",
-                  "&:hover": {
-                    transform: "scale(1.03)",
-                  },
-                }}
-              >
-                <Box
+          <Grid container spacing={4} justifyContent="center">
+            {steps.map((step, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <Paper
+                  elevation={4}
                   sx={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: "50%",
-                    backgroundColor: "#f39c12",
-                    color: "#fff",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: "bold",
-                    fontSize: "18px",
-                    position: "absolute",
-                    top: -25,
-                    left: "calc(50% - 25px)",
-                    boxShadow: 3,
+                    position: "relative",
+                    p: 3,
+                    textAlign: "center",
+                    transform:
+                      index % 2 === 0 ? "rotate(-2deg)" : "rotate(2deg)",
+                    borderRadius: 3,
+                    backgroundColor: "#A4B465",
+                    "&:hover": {
+                      transform: "scale(1.03)",
+                    },
                   }}
                 >
-                  {step.number}
-                </Box>
-                <Box mt={4}>
-                  <Typography
-                    variant="h6"
-                    fontWeight="bold"
-                    sx={{ color: "#f39c12" }}
+                  <Box
+                    sx={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: "50%",
+                      backgroundColor: "#F0BB78",
+                      color: "#fff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      position: "absolute",
+                      top: -25,
+                      left: "calc(50% - 25px)",
+                      boxShadow: 3,
+                    }}
                   >
-                    {step.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" mt={1}>
-                    {step.description}
-                  </Typography>
-                </Box>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </Box>
+                    {step.number}
+                  </Box>
+                  <Box mt={4}>
+                    <Typography
+                      variant="h6"
+                      fontWeight="bold"
+                      sx={{ color: "#626F47" }}
+                    >
+                      {step.title}
+                    </Typography>
+                    <Typography variant="body2" color="#F5ECD5" mt={1}>
+                      {step.description}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
     </Box>
   );
 };

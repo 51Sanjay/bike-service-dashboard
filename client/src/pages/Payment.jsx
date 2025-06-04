@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+// frontend/src/pages/Payment.jsx
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import {
   Box,
@@ -16,70 +18,49 @@ import {
 } from "@mui/material";
 
 const Payment = () => {
-  const [paymentDetails, setPaymentDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetchBookingDetails = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5000/api/get-booking-details"
-      );
-      setPaymentDetails(response.data);
-      localStorage.setItem("lastPayment", JSON.stringify(response.data)); // Store in localStorage
-    } catch (error) {
-      console.error("Error fetching payment details:", error);
-      // Try to load from localStorage if API fails
-      const stored = localStorage.getItem("lastPayment");
-      if (stored) {
-        setPaymentDetails(JSON.parse(stored));
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchBookingDetails();
-  }, []);
+  // Assuming your booking details are stored in Redux under 'booking'
+  const paymentDetails = useSelector((state) => state.booking);
 
   const handlePayment = async () => {
     if (!paymentDetails) return;
 
     try {
-      const response = await axios.post(
+      setLoading(true);
+
+      // Create Razorpay order on backend
+      const { data: order } = await axios.post(
         "http://localhost:5000/api/payment/orders",
         {
           amount: paymentDetails.totalAmount,
         }
       );
 
-      const { id: order_id } = response.data;
-
       const options = {
-        key: "rzp_test_X8woQka3qMWJpR",
-        amount: paymentDetails.totalAmount * 100,
+        key: "rzp_test_X8woQka3qMWJpR", // Your Razorpay Key ID
+        amount: paymentDetails.totalAmount * 100, // in paise
         currency: "INR",
         name: "Bike Service Shop",
         description: "Bike service payment",
-        order_id,
-        handler: function (response) {
-          axios
-            .post("http://localhost:5000/api/payment/verify", {
-              razorpay_order_id: order_id,
+        order_id: order.id,
+        handler: async function (response) {
+          // Verify payment on backend
+          try {
+            await axios.post("http://localhost:5000/api/payment/verify", {
+              razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-            })
-            .then(() => {
-              alert("✅ Booking successful!");
-              localStorage.removeItem("lastPayment"); // Clear stored data
-              setPaymentDetails(null); // Clear state after success
-              navigate("/dashboard"); // Redirect to a confirmation page
-            })
-            .catch(() => {
-              alert("❌ Payment verification failed.");
-              navigate("/payment");
             });
+            alert("✅ Booking successful!");
+            setLoading(false);
+            navigate("/payment");
+            
+          } catch {
+            alert("❌ Payment verification failed.");
+            setLoading(false);
+          }
         },
         prefill: {
           name: paymentDetails.name,
@@ -89,18 +70,24 @@ const Payment = () => {
         notes: {
           address: paymentDetails.location,
         },
+        theme: {
+          color: "#1976d2",
+        },
       };
 
-      const razorpayInstance = new window.Razorpay(options);
-      razorpayInstance.open();
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (error) {
       console.error("Error initiating payment:", error);
+      alert("Payment initiation failed");
+      setLoading(false);
     }
   };
 
   if (loading)
     return <CircularProgress sx={{ mt: 4, mx: "auto", display: "block" }} />;
-  if (!paymentDetails)
+
+  if (!paymentDetails || Object.keys(paymentDetails).length === 0)
     return <Typography>No payment details available.</Typography>;
 
   return (
@@ -118,18 +105,10 @@ const Payment = () => {
                   Customer Info
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                <Typography>
-                  <strong>Name:</strong> {paymentDetails.name}
-                </Typography>
-                <Typography>
-                  <strong>Email:</strong> {paymentDetails.email}
-                </Typography>
-                <Typography>
-                  <strong>Phone:</strong> {paymentDetails.phone}
-                </Typography>
-                <Typography>
-                  <strong>Location:</strong> {paymentDetails.location}
-                </Typography>
+                <Typography><strong>Name:</strong> {paymentDetails.name}</Typography>
+                <Typography><strong>Email:</strong> {paymentDetails.email}</Typography>
+                <Typography><strong>Phone:</strong> {paymentDetails.phone}</Typography>
+                <Typography><strong>Location:</strong> {paymentDetails.location}</Typography>
               </Grid>
 
               <Grid item xs={12} md={6}>
@@ -137,18 +116,10 @@ const Payment = () => {
                   Vehicle Details
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                <Typography>
-                  <strong>Vehicle Number:</strong> {paymentDetails.vehicleNumber}
-                </Typography>
-                <Typography>
-                  <strong>Type:</strong> {paymentDetails.vehicleType}
-                </Typography>
-                <Typography>
-                  <strong>Brand:</strong> {paymentDetails.vehicleBrand}
-                </Typography>
-                <Typography>
-                  <strong>Model:</strong> {paymentDetails.vehicleModel}
-                </Typography>
+                <Typography><strong>Vehicle Number:</strong> {paymentDetails.vehicleNumber}</Typography>
+                <Typography><strong>Type:</strong> {paymentDetails.vehicleType}</Typography>
+                <Typography><strong>Brand:</strong> {paymentDetails.vehicleBrand}</Typography>
+                <Typography><strong>Model:</strong> {paymentDetails.vehicleModel}</Typography>
               </Grid>
 
               <Grid item xs={12}>
@@ -156,25 +127,36 @@ const Payment = () => {
                   Service Information
                 </Typography>
                 <Divider sx={{ mb: 2 }} />
-                <Typography>
-                  <strong>Date:</strong> {paymentDetails.date}
-                </Typography>
-                <Typography>
-                  <strong>Time Slot:</strong> {paymentDetails.timeSlot}
-                </Typography>
-                <Typography>
-                  <strong>Pickup/Drop:</strong> {paymentDetails.pickupDrop}
-                </Typography>
-                <Typography sx={{ mt: 2 }}>
-                  <strong>Selected Services:</strong>
-                </Typography>
+                <Typography><strong>Date:</strong> {paymentDetails.date}</Typography>
+                <Typography><strong>Time Slot:</strong> {paymentDetails.timeSlot}</Typography>
+                <Typography><strong>Pickup/Drop:</strong> {paymentDetails.pickupDrop}</Typography>
+
+                <Typography sx={{ mt: 2 }}><strong>Selected Services:</strong></Typography>
                 <List dense>
-                  {paymentDetails.services?.map((service, idx) => (
-                    <ListItem key={idx}>
-                      <ListItemText primary={`• ${service}`} />
-                    </ListItem>
-                  ))}
+                  {paymentDetails.services && paymentDetails.services.length > 0 ? (
+                    paymentDetails.services.map((service, idx) => (
+                      <ListItem key={idx}>
+                        <ListItemText primary={`• ${service}`} />
+                      </ListItem>
+                    ))
+                  ) : (
+                    <ListItem><ListItemText primary="No services selected" /></ListItem>
+                  )}
                 </List>
+
+                <Typography sx={{ mt: 2 }}><strong>Additional Cards:</strong></Typography>
+                <List dense>
+                  {paymentDetails.addtoCard && paymentDetails.addtoCard.length > 0 ? (
+                    paymentDetails.addtoCard.map((card, idx) => (
+                      <ListItem key={idx}>
+                        <ListItemText primary={`• ${card.title}`} secondary={`Price: ₹${card.newPrice}`} />
+                      </ListItem>
+                    ))
+                  ) : (
+                    <ListItem><ListItemText primary="No additional cards selected" /></ListItem>
+                  )}
+                </List>
+
                 <Divider sx={{ my: 2 }} />
                 <Typography variant="h6" color="secondary">
                   Total Amount: ₹{paymentDetails.totalAmount}
@@ -185,12 +167,7 @@ const Payment = () => {
         </Card>
 
         <Box mt={4} textAlign="center">
-          <Button
-            variant="contained"
-            color="success"
-            size="large"
-            onClick={handlePayment}
-          >
+          <Button variant="contained" color="success" size="large" onClick={handlePayment}>
             Pay Now
           </Button>
         </Box>

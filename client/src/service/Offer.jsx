@@ -16,9 +16,12 @@ import MotorcycleIcon from "@mui/icons-material/TwoWheeler";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import BuildIcon from "@mui/icons-material/Build";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { useDispatch } from "react-redux";
+import { setOfferService } from "../redux/offerSlice";
 
 const BikeOffer = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const offerPoints = [
     {
@@ -53,19 +56,22 @@ const BikeOffer = () => {
     },
   ];
 
-  const handleCheckout = () => {
-    navigate("/booking");
-  };
+ const handleCheckout = (offer) => {
+     dispatch(setOfferService(offer));
+     navigate("/booking");
+   };
 
   return (
-    <Box sx={{ minHeight: "100%", width: "100%", py: 3, paddingTop: "130px" }}>
-      <Box
-        sx={{
-          backgroundColor: "#C2B97F",
-          minHeight: "100vh",
-          pb: 6,
-        }}
-      >
+    <Box
+          sx={{
+            backgroundColor: "#fff",
+            minHeight: "100%",
+            width: "100%",
+            py: 1,
+            paddingTop: "130px",
+          }}
+        >
+      <Box sx={{ py: 10, backgroundColor: "#F6F8FC", minHeight: "100vh" }}>
         <Container maxWidth="lg">
           {/* Header */}
           <Box textAlign="center" mb={5}>
@@ -93,7 +99,7 @@ const BikeOffer = () => {
                     height: "100%",
                     borderRadius: 4,
                     boxShadow: 3,
-                    backgroundColor: "#FFFDD0",
+                    backgroundColor: "#ffffff",
                     transition: "0.3s",
                     "&:hover": {
                       transform: "translateY(-5px)",
@@ -134,7 +140,7 @@ const BikeOffer = () => {
 
             <Button
               variant="contained"
-              onClick={handleCheckout}
+              onClick={() => handleCheckout(offer)}
               sx={{
                 mt: 2,
                 backgroundColor: "#164BA1",

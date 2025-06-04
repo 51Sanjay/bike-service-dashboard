@@ -12,6 +12,15 @@ const bookingSchema = new mongoose.Schema({
   date: { type: String },
   timeSlot: { type: String },
   services: [{ type: String }],
+  addtoCard: [
+    {
+      title: String,
+      features: [String],
+      oldPrice: Number,
+      newPrice: Number,
+      bgColor: String,
+    },
+  ],
   pickupDrop: { type: String },
   totalAmount: { type: Number },
 }, { timestamps: true });

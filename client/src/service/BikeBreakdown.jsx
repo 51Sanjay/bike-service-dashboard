@@ -8,155 +8,190 @@ import {
   Container,
   Card,
   CardContent,
-  CardActions,
-  Divider,
 } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import BuildIcon from "@mui/icons-material/Build";
-import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
-import ElectricBoltIcon from "@mui/icons-material/ElectricBolt";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import PhoneInTalkIcon from "@mui/icons-material/PhoneInTalk";
-import FlatwareIcon from "@mui/icons-material/CarRepair";
+import {
+  ElectricBolt,
+  CarRepair,
+  LocalGasStation,
+  DirectionsCar,
+  SupportAgent,
+  PhoneInTalk,
+  Build,
+  AccessTime,
+} from "@mui/icons-material";
+import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { setBikeBreakDownService } from "../redux/bikeBreakDownSlice";
 
 const BikeBreakdown = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const iconMap = {
+    ElectricBolt: <ElectricBolt sx={{ fontSize: 40, color: "#164BA1" }} />,
+    CarRepair: <CarRepair sx={{ fontSize: 40, color: "#164BA1" }} />,
+    LocalGasStation: (
+      <LocalGasStation sx={{ fontSize: 40, color: "#164BA1" }} />
+    ),
+    DirectionsCar: <DirectionsCar sx={{ fontSize: 40, color: "#164BA1" }} />,
+    SupportAgent: <SupportAgent sx={{ fontSize: 40, color: "#164BA1" }} />,
+    PhoneInTalk: <PhoneInTalk sx={{ fontSize: 40, color: "#164BA1" }} />,
+  };
 
   const serviceCards = [
     {
-      icon: <ElectricBoltIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon: "ElectricBolt",
       title: "Battery Jumpstart",
-      description: "Instant battery boost on the spot to get you moving.",
+      features: ["Instant battery boost on the spot to get you moving."],
+      newPrice: 300,
     },
     {
-      icon: <FlatwareIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
-      title: "Flat Tyre Fix",
-      description: "Quick fix or replacement to keep you rolling safely.",
+      icon: "CarRepair",
+      title: "Battery Jumpstart",
+      features: ["Quick fix or replacement to keep you rolling safely."],
+      newPrice: 200,
     },
     {
-      icon: <LocalGasStationIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon: "LocalGasStation",
       title: "Fuel Delivery",
-      description: "Up to 5 km range emergency fuel delivery.",
+      features: ["Up to 5 km range emergency fuel delivery."],
+      newPrice: 150,
     },
     {
-      icon: <DirectionsCarIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon: "DirectionsCar",
       title: "Towing Service",
-      description: "Tow your vehicle to the nearest garage hassle-free.",
+      features: ["Tow your vehicle to the nearest garage hassle-free."],
+      newPrice: 300,
     },
     {
-      icon: <SupportAgentIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon: "SupportAgent",
       title: "Accident Support",
-      description: "Assistance with first aid and vehicle safety post-crash.",
+      features: ["First aid and vehicle safety post-crash."],
+      newPrice: 500,
     },
     {
-      icon: <PhoneInTalkIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon: "PhoneInTalk",
       title: "24x7 Helpline",
-      description: "We’re always a call away for any roadside emergency.",
+      features: ["Always a call away for any roadside emergency."],
+      newPrice: 650,
     },
   ];
 
-  const handleCheckout = () => {
+  const handleCheckout = (service) => {
+    dispatch(setBikeBreakDownService(service));
     navigate("/booking");
   };
 
   return (
     <Box
       sx={{
+        backgroundColor: "#fff",
         minHeight: "100%",
         width: "100%",
-        py: 3,
+        py: 1,
         paddingTop: "130px",
       }}
     >
-      <Box
-        sx={{
-          backgroundColor: "#C2B97F",
-          color: "black",
-          py: 6,
-          minHeight: "100vh",
-        }}
-      >
+      <Box sx={{ py: 10, backgroundColor: "#F6F8FC", minHeight: "100vh" }}>
         <Container maxWidth="lg">
-          {/* Header Section */}
-          <Box textAlign="center" mb={5}>
-            <BuildIcon sx={{ fontSize: 80 }} />
+          <Box textAlign="center" mb={6}>
+            <Build sx={{ fontSize: 60 }} />
             <Typography variant="h4" fontWeight="bold" mt={2}>
               Breakdown Assistance
             </Typography>
             <Typography variant="body1" mt={1}>
-              • On-Road Emergency Help &nbsp;&nbsp;• Fast Response Service
-              &nbsp;&nbsp;• Expert Mechanic Dispatch
+              • Emergency On-Road Help &nbsp; • Fast Dispatch &nbsp; • Expert
+              Mechanics
               <br />
-              <AccessTimeIcon sx={{ fontSize: 16, mb: "-3px", ml: 1 }} />{" "}
-              Arrival in ~45 mins*
+              <AccessTime sx={{ fontSize: 16, mb: "-3px" }} /> Arrival in ~45
+              mins*
             </Typography>
           </Box>
 
-          {/* Services as Cards */}
           <Grid container spacing={4}>
             {serviceCards.map((service, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    borderRadius: 4,
-                    boxShadow: 4,
-                    transition: "0.3s",
-                    backgroundColor:"#FFFDD0",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      boxShadow: 6,
-                    },
-                  }}
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                  viewport={{ once: true }}
                 >
-                  <CardContent>
-                    <Box display="flex" justifyContent="center" mb={2}>
-                      {service.icon}
-                    </Box>
-                    <Typography variant="h6" fontWeight="bold" align="center">
-                      {service.title}
-                    </Typography>
-                    <Typography variant="body2" align="center" mt={1}>
-                      {service.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                  <Card
+                    sx={{
+                      borderRadius: 3,
+                      boxShadow: 4,
+                      backgroundColor: "#ffffff",
+                      p: 2,
+                      height: 260, // Fixed height for all cards
+                      width: "100%", // Set width to 100% of the container
+                      maxWidth: 320, // Max width for uniform card size
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      transition: "all 0.3s",
+                      "&:hover": {
+                        boxShadow: 6,
+                      },
+                    }}
+                  >
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          mb: 2,
+                        }}
+                      >
+                        {iconMap[service.icon]}
+                      </Box>
+                      <Typography
+                        variant="h6"
+                        fontWeight="bold"
+                        align="center"
+                        gutterBottom
+                      >
+                        {service.title}
+                      </Typography>
+                      <Typography variant="body2" align="center" mb={2}>
+                        {service.features}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        align="center"
+                        fontWeight="bold"
+                        color="primary"
+                      >
+                        ₹{service.newPrice}
+                      </Typography>
+                    </CardContent>
+
+                    <Button
+                      variant="contained"
+                      onClick={() => handleCheckout(service)}
+                      sx={{
+                        mt: 1,
+                        backgroundColor: "#164BA1",
+                        "&:hover": {
+                          backgroundColor: "#B4C5E4",
+                          color: "#000",
+                        },
+                        px: 2,
+                        py: 1,
+                        fontWeight: "bold",
+                        borderRadius: 2,
+                        display: "block",
+                        mx: "auto",
+                      }}
+                    >
+                      ADD TO BOOK
+                    </Button>
+                  </Card>
+                </motion.div>
               </Grid>
             ))}
           </Grid>
-
-          {/* Divider + Pricing */}
-          <Divider sx={{ my: 6, backgroundColor: "#fff", opacity: 0.2 }} />
-
-          <Box textAlign="center">
-            <Typography
-              variant="body2"
-              sx={{ textDecoration: "line-through", opacity: 0.7 }}
-            >
-              ₹999
-            </Typography>
-            <Typography variant="h5" fontWeight="bold" color="white">
-              ₹799 Only
-            </Typography>
-
-            <Button
-              variant="contained"
-              onClick={handleCheckout}
-              sx={{
-                mt: 2,
-                backgroundColor: "#383896",
-                "&:hover": { backgroundColor: "#B4C5E4", color: "#000" },
-                px: 5,
-                py: 1.5,
-                fontWeight: "bold",
-                borderRadius: 3,
-              }}
-            >
-              Request Help
-            </Button>
-          </Box>
         </Container>
       </Box>
     </Box>

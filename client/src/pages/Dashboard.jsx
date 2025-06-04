@@ -42,37 +42,37 @@ const Dashboard = () => {
 
   const services = [
     {
-      icon: <DirectionsBikeIcon sx={{ fontSize: 60, color: "#d32f2f" }} />,
+      icon: <DirectionsBikeIcon sx={{ fontSize: 60, color: "#E50046" }} />,
       title: "Pick Up & Drop Service",
       description:
         "We offer timely pick up service of your vehicle from your desired location. After the servicing, the bike will be delivered at your location. We offer excellent doorstep bike service at affordable cost.",
     },
     {
-      icon: <BuildIcon sx={{ fontSize: 60, color: "#d32f2f" }} />,
+      icon: <BuildIcon sx={{ fontSize: 60, color: "#E50046" }} />,
       title: "Expert Mechanics",
       description:
         "Avail hassle-free bike servicing and repairs from our highly trained and certified mechanics. The end-to-end servicing is done by professionals ensuring zero compromise on quality.",
     },
     {
-      icon: <AppsIcon sx={{ fontSize: 60, color: "#d32f2f" }} />,
+      icon: <AppsIcon sx={{ fontSize: 60, color: "#E50046" }} />,
       title: "Multi Brand Options",
       description:
         "We offer a one-stop solution to all leading brands of two-wheelers. Our expert mechanics are trained to work on popular brands like Hero, Yamaha, Royal Enfield, KTM, BMW, etc.",
     },
     {
-      icon: <VerifiedIcon sx={{ fontSize: 60, color: "#d32f2f" }} />,
+      icon: <VerifiedIcon sx={{ fontSize: 60, color: "#E50046" }} />,
       title: "Genuine Spare Parts",
       description:
         "We are Coimbatore’s top two-wheeler service center, offering OEM high-quality parts to ensure your ride's best performance and durability. Trust us for long-lasting solutions!",
     },
     {
-      icon: <HomeRepairServiceIcon sx={{ fontSize: 60, color: "#d32f2f" }} />,
+      icon: <HomeRepairServiceIcon sx={{ fontSize: 60, color: "#E50046" }} />,
       title: "Standard Workshop",
       description:
         "Being the trusted bike service center in Coimbatore, your two-wheeler is always in safe hands. Our expert professionals work on resolving issues within committed timelines.",
     },
     {
-      icon: <LocationOnIcon sx={{ fontSize: 60, color: "#d32f2f" }} />,
+      icon: <LocationOnIcon sx={{ fontSize: 60, color: "#E50046" }} />,
       title: "Realtime Tracking",
       description:
         "We keep you informed about periodic maintenance, ensuring your two-wheeler remains in optimal condition and runs excellently on the roads.",
@@ -116,7 +116,7 @@ const Dashboard = () => {
               Fix it with{" "}
               <Typography
                 component="span"
-                sx={{ color: "#d32f2f", fontWeight: "bold" }}
+                sx={{ color: "#E50046", fontWeight: "bold" }}
               >
                 Mechanic
               </Typography>
@@ -137,7 +137,7 @@ const Dashboard = () => {
             >
               <Typography
                 variant="body1"
-                sx={{ fontWeight: "bold", color: "#d32f2f" }}
+                sx={{ fontWeight: "bold", color: "#E50046" }}
               >
                 4.8 out of 708 Reviews
               </Typography>
@@ -148,10 +148,12 @@ const Dashboard = () => {
             <Grid container spacing={2} justifyContent="center" sx={{ mt: 4 }}>
               <Grid item>
                 <Button
-                  variant="contained"
-                  color="error"
+                  variant="outlined"
+                  
                   startIcon={<PhoneIcon />}
-                  sx={{ px: 3, py: 1.2, fontWeight: "bold", fontSize: "1rem" }}
+                  sx={{ px: 3, py: 1.2, fontWeight: "bold", fontSize: "1rem",borderColor: "#d32f2f",
+                    color: "#E50046",
+                    "&:hover": { backgroundColor: "#E50046", color: "#fff" },}}
                 >
                   CALL : 9159456789
                 </Button>
@@ -166,8 +168,8 @@ const Dashboard = () => {
                     fontWeight: "bold",
                     fontSize: "1rem",
                     borderColor: "#d32f2f",
-                    color: "#d32f2f",
-                    "&:hover": { backgroundColor: "#d32f2f", color: "#fff" },
+                    color: "#E50046",
+                    "&:hover": { backgroundColor: "#E50046", color: "#fff" },
                   }}
                   
                 >
@@ -199,6 +201,7 @@ const Dashboard = () => {
                 <Grid item xs={12} sm={6} md={4} key={index}>
                   <Card
                     sx={{
+                      background:"rgb(199, 219, 156)",
                       height: "100%",
                       display: "flex",
                       flexDirection: "column",
@@ -209,16 +212,16 @@ const Dashboard = () => {
                       "&:hover": { boxShadow: 3 },
                     }}
                   >
-                    {service.icon}
+                    {service.icon }
                     <CardContent>
                       <Typography
                         variant="h6"
                         fontWeight="bold"
-                        sx={{ color: "#d32f2f" }}
+                        sx={{ color: "#557C55" }}
                       >
                         {service.title}
                       </Typography>
-                      <Typography variant="body2" sx={{ mt: 2, color: "#666" }}>
+                      <Typography variant="body2" sx={{ mt: 2, color: "FFF0BD" }}>
                         {service.description}
                       </Typography>
                     </CardContent>
@@ -406,6 +409,7 @@ const Dashboard = () => {
                   }}
                 />
               </Grid>
+              
 
               {/* Right Side - Text Content */}
               <Grid item xs={12} md={7}>

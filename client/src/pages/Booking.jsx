@@ -25,6 +25,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setBookingData } from "../redux/bookingSlice";
 
 const serviceOptionsWithPrice = [
   { name: "General service", price: 200 },
@@ -135,15 +137,35 @@ const timeSlots = [
 ];
 
 const Booking = () => {
-  const selectedService = useSelector(
-    (state) => state.booking.selectedService || [],
+  const dispatch = useDispatch();
+  const selectedGeneralService = useSelector(
+    (state) => state.generalService.selectedGeneralService || [],
   );
   const selectedWaterService = useSelector(
     (state) => state.waterService.selectedWaterService || [],
   );
+  const selectedBikeEngineService = useSelector(
+    (state) => state.bikeEngineService.selectedBikeEngineService || [],
+  );
+  const selectedBikeBreakDownService = useSelector(
+    (state) => state.bikeBreakdownService.selectedBikeBreakDownService || [],
+  );
+  const selectedPunctureService = useSelector(
+    (state) => state.PunctureService.selectedPunctureService || [],
+  );
+  const selectedOfferService = useSelector(
+    (state) => state.OfferService.selectedOfferService || [],
+  );
 
   // Combine all selected services into one array
-  const allSelectedServices = [...selectedService, ...selectedWaterService];
+  const allSelectedServices = [
+    ...selectedGeneralService,
+    ...selectedWaterService,
+    ...selectedBikeEngineService,
+    ...selectedBikeBreakDownService,
+    ...selectedPunctureService,
+    ...selectedOfferService,
+  ];
 
   const navigate = useNavigate();
 
@@ -159,7 +181,7 @@ const Booking = () => {
     date: "",
     timeSlot: "",
     services: [],
-    addtoCard: "",
+    addtoCard: [],
     pickupDrop: "None",
   });
 
@@ -200,7 +222,11 @@ const Booking = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (!/^[A-Za-z\s]+$/.test(formData.name)) {
+      newErrors.name = "Name should not contain numbers or letter characters";
+    }
 
     if (!formData.email.trim()) {
       newErrors.email = "E-Mail is required";
@@ -211,7 +237,7 @@ const Booking = () => {
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
     } else if (!/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = "Phone must be 10 digits";
+      newErrors.phone = "Phone must be 10 digits Number Only";
     }
 
     if (!formData.location.trim()) newErrors.location = "Location is required";
@@ -246,12 +272,19 @@ const Booking = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    // Add the selected cards to formData before sending
+    const updatedFormData = {
+      ...formData,
+      addtoCard: allSelectedServices, // attach the selected service cards
+      totalAmount: totalAmounto, // attach total price as well
+    };
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/bookings",
-        formData,
+        updatedFormData,
       );
-
+      dispatch(setBookingData(updatedFormData));
       navigate("/payment");
 
       alert("✅ Booking successful!");
@@ -272,7 +305,7 @@ const Booking = () => {
         totalAmount: 0,
       });
       setErrors({});
-    } catch (error) {
+    } catch (error) { 
       console.error("Booking error:", error);
       alert(
         "⚠️ Server error: " + (error.response?.data?.message || error.message),
@@ -290,22 +323,48 @@ const Booking = () => {
       )
       .reduce((a, b) => a + b, 0);
 
-    const selectedCardTotal = selectedService
+    const generalServiceTotal = selectedGeneralService
       .map((s) => s.newPrice || 0)
-      .reduce((a, b) => a + b, 0);
+      .reduce((a, b) => a + b, 0); 
 
     const waterServiceTotal = selectedWaterService
       .map((s) => s.newPrice || 0)
       .reduce((a, b) => a + b, 0);
 
-    return serviceTotal + selectedCardTotal + waterServiceTotal;
+    const BikeEngineServiceTotal = selectedBikeEngineService
+      .map((s) => s.newPrice || 0)
+      .reduce((a, b) => a + b, 0);
+
+    const BikeBreakDownServiceTotal = selectedBikeBreakDownService
+      .map((s) => s.newPrice || 0)
+      .reduce((a, b) => a + b, 0);
+
+    const BikePunctureServiceTotal = selectedPunctureService
+      .map((s) => s.newPrice || 0)
+      .reduce((a, b) => a + b, 0);
+
+    return (
+      serviceTotal +
+      generalServiceTotal +
+      waterServiceTotal +
+      BikeEngineServiceTotal +
+      BikeBreakDownServiceTotal +
+      BikePunctureServiceTotal
+    );
   };
 
   const [totalAmounto, setTotalAmounto] = useState(0);
 
   useEffect(() => {
     setTotalAmounto(calculateTotal());
-  }, [formData.services, selectedService, selectedWaterService]);
+  }, [
+    formData.services,
+    selectedGeneralService,
+    selectedWaterService,
+    selectedBikeEngineService,
+    selectedBikeBreakDownService,
+    selectedPunctureService,
+  ]);
 
   return (
     <Box
@@ -394,17 +453,14 @@ const Booking = () => {
                   value={formData.vehicleType}
                   onChange={(e) => {
                     handleChange("vehicleType", e.target.value);
-                    handleChange("vehicleBrand", "");
-                    handleChange("vehicleModel", "");
                   }}
                   error={!!errors.vehicleType}
                   helperText={errors.vehicleType}
                 >
-                  {Object.keys(bikeData).map((type) => (
-                    <MenuItem key={type} value={type}>
-                      {type}
-                    </MenuItem>
-                  ))}
+                  <MenuItem value="">Select Type</MenuItem>
+                  <MenuItem value="Bike">Bike</MenuItem>
+                  <MenuItem value="Scooter">Scooter</MenuItem>
+                  <MenuItem value="E-Vehicle">E-Vehicle</MenuItem>
                 </TextField>
               </Grid>
 
@@ -418,16 +474,22 @@ const Booking = () => {
                       value={formData.vehicleBrand}
                       onChange={(e) => {
                         handleChange("vehicleBrand", e.target.value);
-                        handleChange("vehicleModel", "");
                       }}
                       error={!!errors.vehicleBrand}
                       helperText={errors.vehicleBrand}
                     >
-                      {bikeData[formData.vehicleType].map((brand) => (
-                        <MenuItem key={brand} value={brand}>
-                          {brand}
+                      {Array.isArray(bikeData[formData.vehicleType]) &&
+                      bikeData[formData.vehicleType].length > 0 ? (
+                        bikeData[formData.vehicleType].map((brand) => (
+                          <MenuItem key={brand} value={brand}>
+                            {brand}
+                          </MenuItem>
+                        ))
+                      ) : (
+                        <MenuItem disabled value="">
+                          Select Vehicle Type First
                         </MenuItem>
-                      ))}
+                      )}
                     </TextField>
                   </Grid>
 
@@ -444,11 +506,18 @@ const Booking = () => {
                       helperText={errors.vehicleModel}
                       disabled={!formData.vehicleBrand}
                     >
-                      {modelData[formData.vehicleBrand]?.map((model) => (
-                        <MenuItem key={model} value={model}>
-                          {model}
+                      {Array.isArray(modelData[formData.vehicleBrand]) &&
+                      modelData[formData.vehicleBrand].length > 0 ? (
+                        modelData[formData.vehicleBrand].map((model) => (
+                          <MenuItem key={model} value={model}>
+                            {model}
+                          </MenuItem>
+                        ))
+                      ) : (
+                        <MenuItem disabled value="">
+                          Select Brand First
                         </MenuItem>
-                      ))}
+                      )}
                     </TextField>
                   </Grid>
                 </>
@@ -464,7 +533,7 @@ const Booking = () => {
                           <FormControlLabel
                             control={
                               <Checkbox
-                                value={service.name}
+                                value={service.name}  
                                 checked={formData.services.includes(
                                   service.name,
                                 )}
@@ -487,8 +556,8 @@ const Booking = () => {
 
               <Grid item xs={12}>
                 <FormControl component="fieldset" value={formData.addtoCard}>
-                  <FormLabel component="legend">
-                    Booking Add to Cards :
+                  <FormLabel component="legend" sx={{ fontWeight: "bold" }}>
+                    Booking Add to Cards
                   </FormLabel>
                   <FormGroup>
                     <Grid container spacing={4} direction="column">

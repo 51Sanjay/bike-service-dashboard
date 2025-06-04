@@ -8,9 +8,7 @@ import {
   Container,
   Card,
   CardContent,
-  Divider,
 } from "@mui/material";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import MotorcycleIcon from "@mui/icons-material/TwoWheeler";
 import TireRepairIcon from "@mui/icons-material/BuildCircle";
 import PlumbingIcon from "@mui/icons-material/Plumbing";
@@ -19,74 +17,83 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import TuneIcon from "@mui/icons-material/Tune";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { motion } from "framer-motion";
+import { useDispatch } from "react-redux";
+import { setPunctureService } from "../redux/punctureSlice";
 
 const Puncture = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+   const iconMap = {
+    TireRepairIcon:<TireRepairIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+    PlumbingIcon:<PlumbingIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+    CompressIcon:<CompressIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+    AddCircleIcon:<AddCircleIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+    TuneIcon:<TuneIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+    VerifiedIcon:<VerifiedIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+   }
 
   const punctureServices = [
     {
-      icon: <TireRepairIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon:"TireRepairIcon",
       title: "Tyre Inspection",
-      description: "Thorough check for punctures, nails, or external damage.",
+      features: ["Thorough check for punctures, nails, or external damage."],
+      newPrice: 300,
     },
     {
-      icon: <PlumbingIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon:"PlumbingIcon",
       title: "Tube Removal & Repair",
-      description: "Safe tube removal and repair using industrial-grade patches.",
+      features:["Safe tube removal and repair using industrial-grade patches."],
+      newPrice: 150,
     },
     {
-      icon: <CompressIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon:"CompressIcon",
       title: "Tyre Pressure Check",
-      description: "Accurate air pressure refilling and balance check.",
+      features:["Accurate air pressure refilling and balance check."],
+      newPrice:400,
     },
     {
-      icon: <AddCircleIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon:"AddCircleIcon" ,
       title: "Valve Replacement",
-      description: "Valve core checked & replaced if damaged or leaking.",
+      features: ["Valve core checked & replaced if damaged or leaking."],
+      newPrice: 350,
     },
     {
-      icon: <TuneIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon:"TuneIcon",
       title: "Tubeless Tyre Plugging",
-      description: "Premium plugging for tubeless tyres using mushroom plugs.",
+      features: ["Premium plugging for tubeless tyres using mushroom plugs."],
+      newPrice: 500,
     },
     {
-      icon: <VerifiedIcon sx={{ fontSize: 40, color: "#164BA1" }} />,
+      icon:"VerifiedIcon",
       title: "Final Safety Check",
-      description: "Bead seating, wheel spin & alignment test before delivery.",
+      features: ["Bead seating, wheel spin & alignment test before delivery."],
+      newPrice: 550,
     },
   ];
 
-  const handleCheckout = () => {
-    navigate("/booking");
-  };
+  const handleCheckout = (service) => {
+      dispatch(setPunctureService(service));
+      navigate("/booking");
+    };
 
   return (
     <Box
       sx={{
+        backgroundColor: "#fff",
         minHeight: "100%",
         width: "100%",
-        py: 3,
+        py: 1,
         paddingTop: "130px",
       }}
     >
-      <Box
-        sx={{
-          backgroundColor: "#C2B97F",
-          color: "black",
-          py: 6,
-          minHeight: "100vh",
-        }}
-      >
+      <Box sx={{ py: 10, backgroundColor: "#F6F8FC", minHeight: "100vh" }}>
         <Container maxWidth="lg">
           {/* Header Section */}
-          <Box textAlign="center" mb={5}>
+          <Box textAlign="center" mb={6}>
             <MotorcycleIcon sx={{ fontSize: 80 }} />
-            <Typography
-              variant="h4"
-              fontWeight="bold"
-              mt={2}
-              sx={{ textDecoration: "underline" }}
-            >
+            <Typography variant="h4" fontWeight="bold" mt={2}>
               Bike Puncture Repair
             </Typography>
             <Typography variant="body1" mt={1}>
@@ -102,65 +109,85 @@ const Puncture = () => {
           <Grid container spacing={4}>
             {punctureServices.map((service, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    borderRadius: 4,
-                    boxShadow: 4,
-                    transition: "0.3s",
-                    backgroundColor:"#FFFDD0",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      boxShadow: 6,
-                    },
-                  }}
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                  viewport={{ once: true }}
                 >
-                  <CardContent>
-                    <Box display="flex" justifyContent="center" mb={2}>
-                      {service.icon}
-                    </Box>
-                    <Typography variant="h6" fontWeight="bold" align="center">
-                      {service.title}
-                    </Typography>
-                    <Typography variant="body2" align="center" mt={1}>
-                      {service.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                  <Card
+                    sx={{
+                      borderRadius: 3,
+                      boxShadow: 4,
+                      backgroundColor: "#ffffff",
+                      p: 2,
+                      height: 240, // Fixed height for all cards
+                      width: "100%", // Set width to 100% of the container
+                      maxWidth: 320, // Max width for uniform card size
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "space-between",
+                      transition: "all 0.3s",
+                      "&:hover": {
+                        boxShadow: 6,
+                      },
+                    }}
+                  >
+                    <CardContent>
+                      <Box sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        mb: 2,
+                      }}>
+                        {iconMap[service.icon]}
+                      </Box>
+                      <Typography
+                        variant="h6"
+                        fontWeight="bold"
+                        align="center"
+                        gutterBottom
+                      >
+                        {service.title}
+                      </Typography>
+                      <Typography variant="body2" align="center" mt={1}>
+                        {service.features}
+                      </Typography>
+                      <Typography
+                        variant="body1"
+                        align="center"
+                        fontWeight="bold"
+                        color="primary"
+                      >
+                        ₹{service.newPrice}
+                      </Typography>
+                    </CardContent>
+
+                    <Button
+                      variant="contained"
+                      onClick={() => handleCheckout(service)}
+                      sx={{
+                        mt: 1,
+                        backgroundColor: "#164BA1",
+                        "&:hover": {
+                          backgroundColor: "#B4C5E4",
+                          color: "#000",
+                        },
+                        px: 2,
+                        py: 1,
+                        fontWeight: "bold",
+                        borderRadius: 2,
+                        display: "block",
+                        mx: "auto",
+                      }}
+                    >
+                      ADD TO BOOK
+                    </Button>
+                  </Card>
+                </motion.div>
               </Grid>
             ))}
           </Grid>
-
-          {/* Divider + Pricing */}
-          <Divider sx={{ my: 6, backgroundColor: "#fff", opacity: 0.2 }} />
-
-          <Box textAlign="center">
-            <Typography
-              variant="body2"
-              sx={{ textDecoration: "line-through", opacity: 0.7 }}
-            >
-              ₹299
-            </Typography>
-            <Typography variant="h5" fontWeight="bold" color="white">
-              ₹199 Only
-            </Typography>
-
-            <Button
-              variant="contained"
-              onClick={handleCheckout}
-              sx={{
-                mt: 2,
-                backgroundColor: "#383896",
-                "&:hover": { backgroundColor: "#B4C5E4", color: "#000" },
-                px: 5,
-                py: 1.5,
-                fontWeight: "bold",
-                borderRadius: 3,
-              }}
-            >
-              Book Now
-            </Button>
-          </Box>
         </Container>
       </Box>
     </Box>
